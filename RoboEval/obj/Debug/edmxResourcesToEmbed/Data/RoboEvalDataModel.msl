@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="RoboEvalModelStoreContainer" CdmEntityContainer="RoboEvalEntities">
+    <EntitySetMapping Name="Courses">
+      <EntityTypeMapping TypeName="RoboEvalModel.Course">
+        <MappingFragment StoreEntitySet="Course">
+          <ScalarProperty Name="CourseNumber" ColumnName="CourseNumber" />
+          <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+          <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Majors">
+      <EntityTypeMapping TypeName="RoboEvalModel.Major">
+        <MappingFragment StoreEntitySet="Major">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="MajorName" ColumnName="MajorName" />
+          <ScalarProperty Name="MajorId" ColumnName="MajorId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Students">
+      <EntityTypeMapping TypeName="RoboEvalModel.Student">
+        <MappingFragment StoreEntitySet="Student">
+          <ScalarProperty Name="TranscriptId" ColumnName="TranscriptId" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Transcripts">
+      <EntityTypeMapping TypeName="RoboEvalModel.Transcript">
+        <MappingFragment StoreEntitySet="Transcript">
+          <ScalarProperty Name="TranscriptId" ColumnName="TranscriptId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="RoboEvalModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="UserGroup" ColumnName="UserGroup" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="CourseTaken" TypeName="RoboEvalModel.CourseTaken" StoreEntitySet="CourseTaken">
+      <EndProperty Name="Transcript">
+        <ScalarProperty Name="TranscriptId" ColumnName="TranscriptId" />
+      </EndProperty>
+      <EndProperty Name="Course">
+        <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MajorRequirements" TypeName="RoboEvalModel.MajorRequirements" StoreEntitySet="MajorRequirements">
+      <EndProperty Name="Major">
+        <ScalarProperty Name="MajorId" ColumnName="MajorId" />
+      </EndProperty>
+      <EndProperty Name="Course">
+        <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="TranscriptMajors" TypeName="RoboEvalModel.TranscriptMajors" StoreEntitySet="TranscriptMajors">
+      <EndProperty Name="Transcript">
+        <ScalarProperty Name="TranscriptId" ColumnName="TranscriptId" />
+      </EndProperty>
+      <EndProperty Name="Major">
+        <ScalarProperty Name="MajorId" ColumnName="MajorId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

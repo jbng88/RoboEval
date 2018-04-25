@@ -1,0 +1,418 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RoboEvalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="CourseId" />
+          </Key>
+          <Property Name="CourseId" Type="int" Nullable="false" />
+          <Property Name="CourseName" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="CourseNumber" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'RoboEval.dbo.CourseTaken' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="CourseTaken">
+          <Key>
+            <PropertyRef Name="TranscriptId" />
+            <PropertyRef Name="CourseId" />
+          </Key>
+          <Property Name="TranscriptId" Type="int" Nullable="false" />
+          <Property Name="CourseId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Major">
+          <Key>
+            <PropertyRef Name="MajorId" />
+          </Key>
+          <Property Name="MajorId" Type="int" Nullable="false" />
+          <Property Name="MajorName" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'RoboEval.dbo.MajorRequirements' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="MajorRequirements">
+          <Key>
+            <PropertyRef Name="MajorId" />
+            <PropertyRef Name="CourseId" />
+          </Key>
+          <Property Name="MajorId" Type="int" Nullable="false" />
+          <Property Name="CourseId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="TranscriptId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transcript">
+          <Key>
+            <PropertyRef Name="TranscriptId" />
+          </Key>
+          <Property Name="TranscriptId" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="TranscriptMajors">
+          <Key>
+            <PropertyRef Name="TranscriptId" />
+            <PropertyRef Name="MajorId" />
+          </Key>
+          <Property Name="TranscriptId" Type="int" Nullable="false" />
+          <Property Name="MajorId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="UserGroup" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__CourseTak__Cours__145C0A3F">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="CourseTaken" Type="Self.CourseTaken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseId" />
+            </Principal>
+            <Dependent Role="CourseTaken">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CourseTak__Trans__1367E606">
+          <End Role="Transcript" Type="Self.Transcript" Multiplicity="1" />
+          <End Role="CourseTaken" Type="Self.CourseTaken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transcript">
+              <PropertyRef Name="TranscriptId" />
+            </Principal>
+            <Dependent Role="CourseTaken">
+              <PropertyRef Name="TranscriptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MajorRequ__Cours__1920BF5C">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="MajorRequirements" Type="Self.MajorRequirements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseId" />
+            </Principal>
+            <Dependent Role="MajorRequirements">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MajorRequ__Major__182C9B23">
+          <End Role="Major" Type="Self.Major" Multiplicity="1" />
+          <End Role="MajorRequirements" Type="Self.MajorRequirements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Major">
+              <PropertyRef Name="MajorId" />
+            </Principal>
+            <Dependent Role="MajorRequirements">
+              <PropertyRef Name="MajorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Student__Transcr__1BFD2C07">
+          <End Role="Transcript" Type="Self.Transcript" Multiplicity="1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transcript">
+              <PropertyRef Name="TranscriptId" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="TranscriptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Transcrip__Major__1ED998B2">
+          <End Role="Major" Type="Self.Major" Multiplicity="1" />
+          <End Role="TranscriptMajors" Type="Self.TranscriptMajors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Major">
+              <PropertyRef Name="MajorId" />
+            </Principal>
+            <Dependent Role="TranscriptMajors">
+              <PropertyRef Name="MajorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Transcrip__Trans__1DE57479">
+          <End Role="Transcript" Type="Self.Transcript" Multiplicity="1" />
+          <End Role="TranscriptMajors" Type="Self.TranscriptMajors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transcript">
+              <PropertyRef Name="TranscriptId" />
+            </Principal>
+            <Dependent Role="TranscriptMajors">
+              <PropertyRef Name="TranscriptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RoboEvalModelStoreContainer">
+          <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Major" EntityType="Self.Major" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transcript" EntityType="Self.Transcript" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseTaken" EntityType="Self.CourseTaken" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CourseTaken].[TranscriptId] AS [TranscriptId], 
+    [CourseTaken].[CourseId] AS [CourseId]
+    FROM [dbo].[CourseTaken] AS [CourseTaken]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="MajorRequirements" EntityType="Self.MajorRequirements" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MajorRequirements].[MajorId] AS [MajorId], 
+    [MajorRequirements].[CourseId] AS [CourseId]
+    FROM [dbo].[MajorRequirements] AS [MajorRequirements]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TranscriptMajors" EntityType="Self.TranscriptMajors" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [TranscriptMajors].[TranscriptId] AS [TranscriptId], 
+    [TranscriptMajors].[MajorId] AS [MajorId]
+    FROM [dbo].[TranscriptMajors] AS [TranscriptMajors]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__CourseTak__Cours__145C0A3F" Association="Self.FK__CourseTak__Cours__145C0A3F">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="CourseTaken" EntitySet="CourseTaken" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CourseTak__Trans__1367E606" Association="Self.FK__CourseTak__Trans__1367E606">
+            <End Role="Transcript" EntitySet="Transcript" />
+            <End Role="CourseTaken" EntitySet="CourseTaken" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MajorRequ__Cours__1920BF5C" Association="Self.FK__MajorRequ__Cours__1920BF5C">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="MajorRequirements" EntitySet="MajorRequirements" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MajorRequ__Major__182C9B23" Association="Self.FK__MajorRequ__Major__182C9B23">
+            <End Role="Major" EntitySet="Major" />
+            <End Role="MajorRequirements" EntitySet="MajorRequirements" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Student__Transcr__1BFD2C07" Association="Self.FK__Student__Transcr__1BFD2C07">
+            <End Role="Transcript" EntitySet="Transcript" />
+            <End Role="Student" EntitySet="Student" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Transcrip__Major__1ED998B2" Association="Self.FK__Transcrip__Major__1ED998B2">
+            <End Role="Major" EntitySet="Major" />
+            <End Role="TranscriptMajors" EntitySet="TranscriptMajors" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Transcrip__Trans__1DE57479" Association="Self.FK__Transcrip__Trans__1DE57479">
+            <End Role="Transcript" EntitySet="Transcript" />
+            <End Role="TranscriptMajors" EntitySet="TranscriptMajors" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RoboEvalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="RoboEvalEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Courses" EntityType="RoboEvalModel.Course" />
+          <EntitySet Name="Majors" EntityType="RoboEvalModel.Major" />
+          <EntitySet Name="Students" EntityType="RoboEvalModel.Student" />
+          <EntitySet Name="Transcripts" EntityType="RoboEvalModel.Transcript" />
+          <EntitySet Name="Users" EntityType="RoboEvalModel.User" />
+          <AssociationSet Name="FK__Student__Transcr__1BFD2C07" Association="RoboEvalModel.FK__Student__Transcr__1BFD2C07">
+            <End Role="Transcript" EntitySet="Transcripts" />
+            <End Role="Student" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="CourseTaken" Association="RoboEvalModel.CourseTaken">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="Transcript" EntitySet="Transcripts" />
+          </AssociationSet>
+          <AssociationSet Name="MajorRequirements" Association="RoboEvalModel.MajorRequirements">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="Major" EntitySet="Majors" />
+          </AssociationSet>
+          <AssociationSet Name="TranscriptMajors" Association="RoboEvalModel.TranscriptMajors">
+            <End Role="Major" EntitySet="Majors" />
+            <End Role="Transcript" EntitySet="Transcripts" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="CourseId" />
+          </Key>
+          <Property Name="CourseId" Type="Int32" Nullable="false" />
+          <Property Name="CourseName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="CourseNumber" Type="Int32" />
+          <NavigationProperty Name="Transcripts" Relationship="RoboEvalModel.CourseTaken" FromRole="Course" ToRole="Transcript" />
+          <NavigationProperty Name="Majors" Relationship="RoboEvalModel.MajorRequirements" FromRole="Course" ToRole="Major" />
+        </EntityType>
+        <EntityType Name="Major">
+          <Key>
+            <PropertyRef Name="MajorId" />
+          </Key>
+          <Property Name="MajorId" Type="Int32" Nullable="false" />
+          <Property Name="MajorName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Courses" Relationship="RoboEvalModel.MajorRequirements" FromRole="Major" ToRole="Course" />
+          <NavigationProperty Name="Transcripts" Relationship="RoboEvalModel.TranscriptMajors" FromRole="Major" ToRole="Transcript" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="TranscriptId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Transcript" Relationship="RoboEvalModel.FK__Student__Transcr__1BFD2C07" FromRole="Student" ToRole="Transcript" />
+        </EntityType>
+        <EntityType Name="Transcript">
+          <Key>
+            <PropertyRef Name="TranscriptId" />
+          </Key>
+          <Property Name="TranscriptId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Students" Relationship="RoboEvalModel.FK__Student__Transcr__1BFD2C07" FromRole="Transcript" ToRole="Student" />
+          <NavigationProperty Name="Courses" Relationship="RoboEvalModel.CourseTaken" FromRole="Transcript" ToRole="Course" />
+          <NavigationProperty Name="Majors" Relationship="RoboEvalModel.TranscriptMajors" FromRole="Transcript" ToRole="Major" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="UserGroup" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Student__Transcr__1BFD2C07">
+          <End Type="RoboEvalModel.Transcript" Role="Transcript" Multiplicity="1" />
+          <End Type="RoboEvalModel.Student" Role="Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transcript">
+              <PropertyRef Name="TranscriptId" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="TranscriptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CourseTaken">
+          <End Type="RoboEvalModel.Course" Role="Course" Multiplicity="*" />
+          <End Type="RoboEvalModel.Transcript" Role="Transcript" Multiplicity="*" />
+        </Association>
+        <Association Name="MajorRequirements">
+          <End Type="RoboEvalModel.Course" Role="Course" Multiplicity="*" />
+          <End Type="RoboEvalModel.Major" Role="Major" Multiplicity="*" />
+        </Association>
+        <Association Name="TranscriptMajors">
+          <End Type="RoboEvalModel.Major" Role="Major" Multiplicity="*" />
+          <End Type="RoboEvalModel.Transcript" Role="Transcript" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RoboEvalModelStoreContainer" CdmEntityContainer="RoboEvalEntities">
+          <EntitySetMapping Name="Courses">
+            <EntityTypeMapping TypeName="RoboEvalModel.Course">
+              <MappingFragment StoreEntitySet="Course">
+                <ScalarProperty Name="CourseNumber" ColumnName="CourseNumber" />
+                <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Majors">
+            <EntityTypeMapping TypeName="RoboEvalModel.Major">
+              <MappingFragment StoreEntitySet="Major">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="MajorName" ColumnName="MajorName" />
+                <ScalarProperty Name="MajorId" ColumnName="MajorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="RoboEvalModel.Student">
+              <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="TranscriptId" ColumnName="TranscriptId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transcripts">
+            <EntityTypeMapping TypeName="RoboEvalModel.Transcript">
+              <MappingFragment StoreEntitySet="Transcript">
+                <ScalarProperty Name="TranscriptId" ColumnName="TranscriptId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="RoboEvalModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserGroup" ColumnName="UserGroup" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="CourseTaken" TypeName="RoboEvalModel.CourseTaken" StoreEntitySet="CourseTaken">
+            <EndProperty Name="Transcript">
+              <ScalarProperty Name="TranscriptId" ColumnName="TranscriptId" />
+            </EndProperty>
+            <EndProperty Name="Course">
+              <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="MajorRequirements" TypeName="RoboEvalModel.MajorRequirements" StoreEntitySet="MajorRequirements">
+            <EndProperty Name="Major">
+              <ScalarProperty Name="MajorId" ColumnName="MajorId" />
+            </EndProperty>
+            <EndProperty Name="Course">
+              <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="TranscriptMajors" TypeName="RoboEvalModel.TranscriptMajors" StoreEntitySet="TranscriptMajors">
+            <EndProperty Name="Transcript">
+              <ScalarProperty Name="TranscriptId" ColumnName="TranscriptId" />
+            </EndProperty>
+            <EndProperty Name="Major">
+              <ScalarProperty Name="MajorId" ColumnName="MajorId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="RoboEvalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="RoboEvalEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Courses" EntityType="RoboEvalModel.Course" />
+    <EntitySet Name="Majors" EntityType="RoboEvalModel.Major" />
+    <EntitySet Name="Students" EntityType="RoboEvalModel.Student" />
+    <EntitySet Name="Transcripts" EntityType="RoboEvalModel.Transcript" />
+    <EntitySet Name="Users" EntityType="RoboEvalModel.User" />
+    <AssociationSet Name="FK__Student__Transcr__1BFD2C07" Association="RoboEvalModel.FK__Student__Transcr__1BFD2C07">
+      <End Role="Transcript" EntitySet="Transcripts" />
+      <End Role="Student" EntitySet="Students" />
+    </AssociationSet>
+    <AssociationSet Name="CourseTaken" Association="RoboEvalModel.CourseTaken">
+      <End Role="Course" EntitySet="Courses" />
+      <End Role="Transcript" EntitySet="Transcripts" />
+    </AssociationSet>
+    <AssociationSet Name="MajorRequirements" Association="RoboEvalModel.MajorRequirements">
+      <End Role="Course" EntitySet="Courses" />
+      <End Role="Major" EntitySet="Majors" />
+    </AssociationSet>
+    <AssociationSet Name="TranscriptMajors" Association="RoboEvalModel.TranscriptMajors">
+      <End Role="Major" EntitySet="Majors" />
+      <End Role="Transcript" EntitySet="Transcripts" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Course">
+    <Key>
+      <PropertyRef Name="CourseId" />
+    </Key>
+    <Property Name="CourseId" Type="Int32" Nullable="false" />
+    <Property Name="CourseName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="CourseNumber" Type="Int32" />
+    <NavigationProperty Name="Transcripts" Relationship="RoboEvalModel.CourseTaken" FromRole="Course" ToRole="Transcript" />
+    <NavigationProperty Name="Majors" Relationship="RoboEvalModel.MajorRequirements" FromRole="Course" ToRole="Major" />
+  </EntityType>
+  <EntityType Name="Major">
+    <Key>
+      <PropertyRef Name="MajorId" />
+    </Key>
+    <Property Name="MajorId" Type="Int32" Nullable="false" />
+    <Property Name="MajorName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Courses" Relationship="RoboEvalModel.MajorRequirements" FromRole="Major" ToRole="Course" />
+    <NavigationProperty Name="Transcripts" Relationship="RoboEvalModel.TranscriptMajors" FromRole="Major" ToRole="Transcript" />
+  </EntityType>
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="StudentId" />
+    </Key>
+    <Property Name="StudentId" Type="Int32" Nullable="false" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="TranscriptId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Transcript" Relationship="RoboEvalModel.FK__Student__Transcr__1BFD2C07" FromRole="Student" ToRole="Transcript" />
+  </EntityType>
+  <EntityType Name="Transcript">
+    <Key>
+      <PropertyRef Name="TranscriptId" />
+    </Key>
+    <Property Name="TranscriptId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Students" Relationship="RoboEvalModel.FK__Student__Transcr__1BFD2C07" FromRole="Transcript" ToRole="Student" />
+    <NavigationProperty Name="Courses" Relationship="RoboEvalModel.CourseTaken" FromRole="Transcript" ToRole="Course" />
+    <NavigationProperty Name="Majors" Relationship="RoboEvalModel.TranscriptMajors" FromRole="Transcript" ToRole="Major" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="UserGroup" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__Student__Transcr__1BFD2C07">
+    <End Type="RoboEvalModel.Transcript" Role="Transcript" Multiplicity="1" />
+    <End Type="RoboEvalModel.Student" Role="Student" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Transcript">
+        <PropertyRef Name="TranscriptId" />
+      </Principal>
+      <Dependent Role="Student">
+        <PropertyRef Name="TranscriptId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CourseTaken">
+    <End Type="RoboEvalModel.Course" Role="Course" Multiplicity="*" />
+    <End Type="RoboEvalModel.Transcript" Role="Transcript" Multiplicity="*" />
+  </Association>
+  <Association Name="MajorRequirements">
+    <End Type="RoboEvalModel.Course" Role="Course" Multiplicity="*" />
+    <End Type="RoboEvalModel.Major" Role="Major" Multiplicity="*" />
+  </Association>
+  <Association Name="TranscriptMajors">
+    <End Type="RoboEvalModel.Major" Role="Major" Multiplicity="*" />
+    <End Type="RoboEvalModel.Transcript" Role="Transcript" Multiplicity="*" />
+  </Association>
+</Schema>

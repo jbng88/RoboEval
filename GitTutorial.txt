@@ -1,0 +1,25 @@
+git status				-check which files changed
+git add .				-add the files changed to be tracked
+git commit -m "{your message here}"	-commit the changes you made to your local version
+git push				-push your changes to the remote version
+git pull				-pull the remote version into your local version
+
+Steps to get the initial remote version to your computer
+1) Go to https://github.com/ and register an account
+2) Go to https://git-scm.com/ and download the version for your computer and install with all defaults
+3) Open Git Bash
+4) Type: cd /c/
+5) Type: git clone https://github.com/jbng88/RoboEval.git
+6) Type: cd /c/RoboEval
+
+Steps when starting up git bash
+1) Type: cd /c/RoboEval
+2) Type: git pull
+
+Steps to save your changes and push it to remote version
+1) Type: git add .
+2) Type: git commit -m "{your message here}"
+3) Type: git push
+
+Make sure you create your own folder in the project to save your changes to
+Jay will consolidate those changes

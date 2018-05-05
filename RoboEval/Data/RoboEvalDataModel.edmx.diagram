@@ -7,7 +7,7 @@
       <Diagram DiagramId="866c8bb8a41c46cfb19ef87db65cb617" Name="Diagram1">
         <EntityTypeShape EntityType="RoboEvalModel.Course" Width="1.5" PointX="2.875" PointY="0.5" />
         <EntityTypeShape EntityType="RoboEvalModel.Major" Width="1.5" PointX="2.875" PointY="3.375" />
-        <EntityTypeShape EntityType="RoboEvalModel.Student" Width="1.5" PointX="7.75" PointY="1.75" />
+        <EntityTypeShape EntityType="RoboEvalModel.Student" Width="1.5" PointX="7.875" PointY="1.875" />
         <EntityTypeShape EntityType="RoboEvalModel.Transcript" Width="1.5" PointX="5.25" PointY="2.125" />
         <EntityTypeShape EntityType="RoboEvalModel.User" Width="1.5" PointX="0.5" PointY="1.875" />
         <AssociationConnector Association="RoboEvalModel.FK__Student__Transcr__1BFD2C07" />

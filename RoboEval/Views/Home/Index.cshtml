@@ -1,24 +1,94 @@
-﻿<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+﻿<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="dropdown">
+                <button type="button" class="btn btn-light dropdown-toggle" id="menuDropdown" data-toggle="dropdown">
+                    Make a selection <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu">
+                    <div class="col-md-12"><a class="dropdown-item" href="#" onclick="onSelect(1)">STUDENT TRANSCRIPT</a></div>
+                    <div class="col-md-12"><a class="dropdown-item" href="#" onclick="onSelect(2)">STUDENT ACADEMIC RECORDS</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-5">
+                        <div>
+                            <span id="lastName"></span>, <span id="firstName"></span>
+                        </div>
+                        <div>
+                            DOB: <span id="birthDay"></span>
+                        </div>
+                        <div>
+                            SSN: <span id="socialSecurity"></span>
+                        </div>
+                        <div>
+                            Address: <span id="address"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-5">
+                        <div>&nbsp;</div>
+                        <div>
+                            <span id="idNumber"></span>
+                        </div>
+                        <div>
+                            Major: <span id="major"></span>
+                        </div>
+                        <div>
+                            Student since: <span id="studentSince"></span>
+                        </div>
+                        <div>
+                            Expected Grad Date: <span id="expectedGradDate"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <button type="button" class="btn btn-light" onclick="onSubmit(addCourseInfoForm)">SAVE</button>
+                <button type="button" class="btn btn-light">CANCEL</button>
+                <button type="button" class="btn btn-light">EXPORT</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="col-md-2">Course</div>
+                    <div class="col-md-1">Section</div>
+                    <div class="col-md-6">Course Title</div>
+                    <div class="col-md-2">Semester</div>
+                    <div class="col-md-1">Grade</div>
+                </div>
+                <div class="transcript-body">
+                    <form class="hide" name="addCourseInfoForm">
+                        <div class="col-md-12 form-body">
+                            <div class="col-md-2 form-group">
+                                <input class="form-control" id="course" />
+                            </div>
+                            <div class="col-md-1 form-group">
+                                <input class="form-control" id="section" />
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <input class="form-control" id="description" />
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <input class="form-control" id="semester" />
+                            </div>
+                            <div class="col-md-1 form-group">
+                                <input class="form-control" id="grade" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-        a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-        is an ideal platform for building RESTful applications on the .NET Framework.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
-    </div>
-</div>
+
+<script src="~/Scripts/transcript.js"></script>

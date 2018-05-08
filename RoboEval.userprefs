@@ -1,0 +1,15 @@
+﻿<Properties StartupConfiguration="{D8C2936D-9026-4961-9B60-FF9575B66121}|">
+  <MonoDevelop.Ide.ItemProperties.RoboEval PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="RoboEval/Data/RoboEvalDataModel.edmx">
+    <Files>
+      <File FileName="RoboEval/Controllers/HomeController.cs" Line="50" Column="17" />
+      <File FileName="RoboEval/Data/RoboEvalDataModel.edmx" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>

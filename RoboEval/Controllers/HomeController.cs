@@ -12,7 +12,7 @@ namespace RoboEval.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ViewBag.Title = "RoboEval";
 
             return View();
         }
@@ -70,6 +70,8 @@ namespace RoboEval.Controllers
             }
         }
 
+
+        //FUNCTION TO ADD COURSES ONTO A STUDENT'S TRANSCRIPT (MODIFY TRANSCRIPT)
         public void AddClass(Course course)
         {
             try
@@ -84,5 +86,33 @@ namespace RoboEval.Controllers
                 throw ex;
             }
         }
+
+        //      START NEW ADDITIONS 
+         
+        //GRADE CHANGE FUNCTION 
+        public void ModifyGrade(Course grade)
+        {
+            try
+            {
+                var dbContext = new DbContext("RoboEvalEntities");
+
+                dbContext.Set<Course>().Add(grade);
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }    
+        //END GRADE CHANGE FUNCTION
+
+
+      //public void DisplaySuggestedEdPlan() => GetAllCoursesStillNeededForMajor()
+        private void GetAllCoursesStillNeededForMajor()
+        {
+            throw new NotImplementedException();
+        }
+
+          //END NEW ADDITIONS
     }
 }

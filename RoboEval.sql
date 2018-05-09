@@ -13,6 +13,7 @@ CREATE TABLE Transcript(
 CREATE TABLE CourseTaken(
 	TranscriptId int NOT NULL,
 	CourseId int NOT NULL,
+	Grade string NULL,
     FOREIGN KEY (TranscriptId) REFERENCES Transcript,
     FOREIGN KEY (CourseId) REFERENCES Course
 );

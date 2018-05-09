@@ -10,18 +10,16 @@
             <PropertyRef Name="CourseId" />
           </Key>
           <Property Name="CourseId" Type="int" Nullable="false" />
-          <Property Name="CourseName" Type="nvarchar" MaxLength="64" Nullable="false" />
-          <Property Name="CourseNumber" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'RoboEval.dbo.CourseTaken' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="CourseTaken">
+        <EntityType Name="CoursesTaken">
           <Key>
-            <PropertyRef Name="TranscriptId" />
-            <PropertyRef Name="CourseId" />
+            <PropertyRef Name="CoursesTakenId" />
           </Key>
+          <Property Name="CoursesTakenId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TranscriptId" Type="int" Nullable="false" />
           <Property Name="CourseId" Type="int" Nullable="false" />
+          <Property Name="Grade" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="Major">
           <Key>
@@ -51,6 +49,16 @@ warning 6002: The table/view 'RoboEval.dbo.MajorRequirements' does not have a pr
           <Property Name="Email" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="TranscriptId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
         <EntityType Name="Transcript">
           <Key>
             <PropertyRef Name="TranscriptId" />
@@ -77,30 +85,6 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
           <Property Name="Email" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="UserGroup" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__CourseTak__Cours__145C0A3F">
-          <End Role="Course" Type="Self.Course" Multiplicity="1" />
-          <End Role="CourseTaken" Type="Self.CourseTaken" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Course">
-              <PropertyRef Name="CourseId" />
-            </Principal>
-            <Dependent Role="CourseTaken">
-              <PropertyRef Name="CourseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__CourseTak__Trans__1367E606">
-          <End Role="Transcript" Type="Self.Transcript" Multiplicity="1" />
-          <End Role="CourseTaken" Type="Self.CourseTaken" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Transcript">
-              <PropertyRef Name="TranscriptId" />
-            </Principal>
-            <Dependent Role="CourseTaken">
-              <PropertyRef Name="TranscriptId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__MajorRequ__Cours__1920BF5C">
           <End Role="Course" Type="Self.Course" Multiplicity="1" />
           <End Role="MajorRequirements" Type="Self.MajorRequirements" Multiplicity="*" />
@@ -161,18 +145,38 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CoursesTaken_Course">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="CoursesTaken" Type="Self.CoursesTaken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseId" />
+            </Principal>
+            <Dependent Role="CoursesTaken">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CoursesTaken_Transcript">
+          <End Role="Transcript" Type="Self.Transcript" Multiplicity="1" />
+          <End Role="CoursesTaken" Type="Self.CoursesTaken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transcript">
+              <PropertyRef Name="TranscriptId" />
+            </Principal>
+            <Dependent Role="CoursesTaken">
+              <PropertyRef Name="TranscriptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="RoboEvalModelStoreContainer">
           <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CoursesTaken" EntityType="Self.CoursesTaken" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Major" EntityType="Self.Major" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transcript" EntityType="Self.Transcript" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CourseTaken" EntityType="Self.CourseTaken" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [CourseTaken].[TranscriptId] AS [TranscriptId], 
-    [CourseTaken].[CourseId] AS [CourseId]
-    FROM [dbo].[CourseTaken] AS [CourseTaken]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="MajorRequirements" EntityType="Self.MajorRequirements" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [MajorRequirements].[MajorId] AS [MajorId], 
@@ -185,14 +189,6 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
     [TranscriptMajors].[MajorId] AS [MajorId]
     FROM [dbo].[TranscriptMajors] AS [TranscriptMajors]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK__CourseTak__Cours__145C0A3F" Association="Self.FK__CourseTak__Cours__145C0A3F">
-            <End Role="Course" EntitySet="Course" />
-            <End Role="CourseTaken" EntitySet="CourseTaken" />
-          </AssociationSet>
-          <AssociationSet Name="FK__CourseTak__Trans__1367E606" Association="Self.FK__CourseTak__Trans__1367E606">
-            <End Role="Transcript" EntitySet="Transcript" />
-            <End Role="CourseTaken" EntitySet="CourseTaken" />
-          </AssociationSet>
           <AssociationSet Name="FK__MajorRequ__Cours__1920BF5C" Association="Self.FK__MajorRequ__Cours__1920BF5C">
             <End Role="Course" EntitySet="Course" />
             <End Role="MajorRequirements" EntitySet="MajorRequirements" />
@@ -213,6 +209,14 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
             <End Role="Transcript" EntitySet="Transcript" />
             <End Role="TranscriptMajors" EntitySet="TranscriptMajors" />
           </AssociationSet>
+          <AssociationSet Name="FK_CoursesTaken_Course" Association="Self.FK_CoursesTaken_Course">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="CoursesTaken" EntitySet="CoursesTaken" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CoursesTaken_Transcript" Association="Self.FK_CoursesTaken_Transcript">
+            <End Role="Transcript" EntitySet="Transcript" />
+            <End Role="CoursesTaken" EntitySet="CoursesTaken" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -220,17 +224,23 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
       <Schema Namespace="RoboEvalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="RoboEvalEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Courses" EntityType="RoboEvalModel.Course" />
+          <EntitySet Name="CoursesTakens" EntityType="RoboEvalModel.CoursesTaken" />
           <EntitySet Name="Majors" EntityType="RoboEvalModel.Major" />
           <EntitySet Name="Students" EntityType="RoboEvalModel.Student" />
+          <EntitySet Name="sysdiagrams" EntityType="RoboEvalModel.sysdiagram" />
           <EntitySet Name="Transcripts" EntityType="RoboEvalModel.Transcript" />
           <EntitySet Name="Users" EntityType="RoboEvalModel.User" />
+          <AssociationSet Name="FK_CoursesTaken_Course" Association="RoboEvalModel.FK_CoursesTaken_Course">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="CoursesTaken" EntitySet="CoursesTakens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CoursesTaken_Transcript" Association="RoboEvalModel.FK_CoursesTaken_Transcript">
+            <End Role="Transcript" EntitySet="Transcripts" />
+            <End Role="CoursesTaken" EntitySet="CoursesTakens" />
+          </AssociationSet>
           <AssociationSet Name="FK__Student__Transcr__1BFD2C07" Association="RoboEvalModel.FK__Student__Transcr__1BFD2C07">
             <End Role="Transcript" EntitySet="Transcripts" />
             <End Role="Student" EntitySet="Students" />
-          </AssociationSet>
-          <AssociationSet Name="CourseTaken" Association="RoboEvalModel.CourseTaken">
-            <End Role="Course" EntitySet="Courses" />
-            <End Role="Transcript" EntitySet="Transcripts" />
           </AssociationSet>
           <AssociationSet Name="MajorRequirements" Association="RoboEvalModel.MajorRequirements">
             <End Role="Course" EntitySet="Courses" />
@@ -246,10 +256,20 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
             <PropertyRef Name="CourseId" />
           </Key>
           <Property Name="CourseId" Type="Int32" Nullable="false" />
-          <Property Name="CourseName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="CourseNumber" Type="Int32" />
-          <NavigationProperty Name="Transcripts" Relationship="RoboEvalModel.CourseTaken" FromRole="Course" ToRole="Transcript" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CoursesTakens" Relationship="RoboEvalModel.FK_CoursesTaken_Course" FromRole="Course" ToRole="CoursesTaken" />
           <NavigationProperty Name="Majors" Relationship="RoboEvalModel.MajorRequirements" FromRole="Course" ToRole="Major" />
+        </EntityType>
+        <EntityType Name="CoursesTaken">
+          <Key>
+            <PropertyRef Name="CoursesTakenId" />
+          </Key>
+          <Property Name="CoursesTakenId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TranscriptId" Type="Int32" Nullable="false" />
+          <Property Name="CourseId" Type="Int32" Nullable="false" />
+          <Property Name="Grade" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Course" Relationship="RoboEvalModel.FK_CoursesTaken_Course" FromRole="CoursesTaken" ToRole="Course" />
+          <NavigationProperty Name="Transcript" Relationship="RoboEvalModel.FK_CoursesTaken_Transcript" FromRole="CoursesTaken" ToRole="Transcript" />
         </EntityType>
         <EntityType Name="Major">
           <Key>
@@ -272,13 +292,23 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
           <Property Name="TranscriptId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Transcript" Relationship="RoboEvalModel.FK__Student__Transcr__1BFD2C07" FromRole="Student" ToRole="Transcript" />
         </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
         <EntityType Name="Transcript">
           <Key>
             <PropertyRef Name="TranscriptId" />
           </Key>
           <Property Name="TranscriptId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CoursesTakens" Relationship="RoboEvalModel.FK_CoursesTaken_Transcript" FromRole="Transcript" ToRole="CoursesTaken" />
           <NavigationProperty Name="Students" Relationship="RoboEvalModel.FK__Student__Transcr__1BFD2C07" FromRole="Transcript" ToRole="Student" />
-          <NavigationProperty Name="Courses" Relationship="RoboEvalModel.CourseTaken" FromRole="Transcript" ToRole="Course" />
           <NavigationProperty Name="Majors" Relationship="RoboEvalModel.TranscriptMajors" FromRole="Transcript" ToRole="Major" />
         </EntityType>
         <EntityType Name="User">
@@ -291,6 +321,30 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
           <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="UserGroup" Type="Int32" Nullable="false" />
         </EntityType>
+        <Association Name="FK_CoursesTaken_Course">
+          <End Type="RoboEvalModel.Course" Role="Course" Multiplicity="1" />
+          <End Type="RoboEvalModel.CoursesTaken" Role="CoursesTaken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseId" />
+            </Principal>
+            <Dependent Role="CoursesTaken">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CoursesTaken_Transcript">
+          <End Type="RoboEvalModel.Transcript" Role="Transcript" Multiplicity="1" />
+          <End Type="RoboEvalModel.CoursesTaken" Role="CoursesTaken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transcript">
+              <PropertyRef Name="TranscriptId" />
+            </Principal>
+            <Dependent Role="CoursesTaken">
+              <PropertyRef Name="TranscriptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Student__Transcr__1BFD2C07">
           <End Type="RoboEvalModel.Transcript" Role="Transcript" Multiplicity="1" />
           <End Type="RoboEvalModel.Student" Role="Student" Multiplicity="*" />
@@ -303,10 +357,6 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="CourseTaken">
-          <End Type="RoboEvalModel.Course" Role="Course" Multiplicity="*" />
-          <End Type="RoboEvalModel.Transcript" Role="Transcript" Multiplicity="*" />
-        </Association>
         <Association Name="MajorRequirements">
           <End Type="RoboEvalModel.Course" Role="Course" Multiplicity="*" />
           <End Type="RoboEvalModel.Major" Role="Major" Multiplicity="*" />
@@ -315,7 +365,7 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
           <End Type="RoboEvalModel.Major" Role="Major" Multiplicity="*" />
           <End Type="RoboEvalModel.Transcript" Role="Transcript" Multiplicity="*" />
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -324,9 +374,18 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
           <EntitySetMapping Name="Courses">
             <EntityTypeMapping TypeName="RoboEvalModel.Course">
               <MappingFragment StoreEntitySet="Course">
-                <ScalarProperty Name="CourseNumber" ColumnName="CourseNumber" />
-                <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CoursesTakens">
+            <EntityTypeMapping TypeName="RoboEvalModel.CoursesTaken">
+              <MappingFragment StoreEntitySet="CoursesTaken">
+                <ScalarProperty Name="Grade" ColumnName="Grade" />
+                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+                <ScalarProperty Name="TranscriptId" ColumnName="TranscriptId" />
+                <ScalarProperty Name="CoursesTakenId" ColumnName="CoursesTakenId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -350,6 +409,17 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="RoboEvalModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Transcripts">
             <EntityTypeMapping TypeName="RoboEvalModel.Transcript">
               <MappingFragment StoreEntitySet="Transcript">
@@ -368,14 +438,6 @@ warning 6002: The table/view 'RoboEval.dbo.TranscriptMajors' does not have a pri
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="CourseTaken" TypeName="RoboEvalModel.CourseTaken" StoreEntitySet="CourseTaken">
-            <EndProperty Name="Transcript">
-              <ScalarProperty Name="TranscriptId" ColumnName="TranscriptId" />
-            </EndProperty>
-            <EndProperty Name="Course">
-              <ScalarProperty Name="CourseId" ColumnName="CourseId" />
-            </EndProperty>
-          </AssociationSetMapping>
           <AssociationSetMapping Name="MajorRequirements" TypeName="RoboEvalModel.MajorRequirements" StoreEntitySet="MajorRequirements">
             <EndProperty Name="Major">
               <ScalarProperty Name="MajorId" ColumnName="MajorId" />

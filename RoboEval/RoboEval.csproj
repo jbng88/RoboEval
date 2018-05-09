@@ -235,9 +235,15 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CourseDto.cs" />
+    <Compile Include="Controllers\StudentEdPlan.cs" />
     <Compile Include="Controllers\TranscriptController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TranscriptDto.cs" />
     <Compile Include="Data\Course.cs">
+      <DependentUpon>RoboEvalDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\CoursesTaken.cs">
       <DependentUpon>RoboEvalDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Major.cs">
@@ -259,6 +265,9 @@
       <DependentUpon>RoboEvalDataModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Data\Student.cs">
+      <DependentUpon>RoboEvalDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\sysdiagram.cs">
       <DependentUpon>RoboEvalDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Transcript.cs">

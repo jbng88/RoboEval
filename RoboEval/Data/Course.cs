@@ -17,16 +17,15 @@ namespace RoboEval.Data
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Course()
         {
-            this.Transcripts = new HashSet<Transcript>();
+            this.CoursesTakens = new HashSet<CoursesTaken>();
             this.Majors = new HashSet<Major>();
         }
     
         public int CourseId { get; set; }
-        public string CourseName { get; set; }
-        public Nullable<int> CourseNumber { get; set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Transcript> Transcripts { get; set; }
+        public virtual ICollection<CoursesTaken> CoursesTakens { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Major> Majors { get; set; }
     }

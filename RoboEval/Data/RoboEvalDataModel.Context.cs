@@ -26,8 +26,10 @@ namespace RoboEval.Data
         }
     
         public virtual DbSet<Course> Courses { get; set; }
+        public virtual DbSet<CoursesTaken> CoursesTakens { get; set; }
         public virtual DbSet<Major> Majors { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Transcript> Transcripts { get; set; }
         public virtual DbSet<User> Users { get; set; }
     }

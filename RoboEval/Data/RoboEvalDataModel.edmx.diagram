@@ -5,14 +5,16 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="866c8bb8a41c46cfb19ef87db65cb617" Name="Diagram1" ZoomLevel="100">
-        <EntityTypeShape EntityType="RoboEvalModel.Course" Width="1.5" PointX="8.625" PointY="0.5" />
-        <EntityTypeShape EntityType="RoboEvalModel.Major" Width="1.5" PointX="8.625" PointY="4" />
-        <EntityTypeShape EntityType="RoboEvalModel.Student" Width="1.5" PointX="2.875" PointY="2" />
-        <EntityTypeShape EntityType="RoboEvalModel.Transcript" Width="1.5" PointX="6" PointY="2.25" />
-        <EntityTypeShape EntityType="RoboEvalModel.User" Width="1.5" PointX="0.5" PointY="2.125" />
+        <EntityTypeShape EntityType="RoboEvalModel.Course" Width="1.5" PointX="0.75" PointY="2.75" />
+        <EntityTypeShape EntityType="RoboEvalModel.CoursesTaken" Width="1.5" PointX="7.5" PointY="2" />
+        <EntityTypeShape EntityType="RoboEvalModel.Major" Width="1.5" PointX="3" PointY="5.5" />
+        <EntityTypeShape EntityType="RoboEvalModel.Student" Width="1.5" PointX="7.5" PointY="5.5" />
+        <EntityTypeShape EntityType="RoboEvalModel.sysdiagram" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="RoboEvalModel.Transcript" Width="1.5" PointX="5.25" PointY="5.625" />
+        <EntityTypeShape EntityType="RoboEvalModel.User" Width="1.5" PointX="4.75" PointY="0.75" />
+        <AssociationConnector Association="RoboEvalModel.FK_CoursesTaken_Course" />
+        <AssociationConnector Association="RoboEvalModel.FK_CoursesTaken_Transcript" />
         <AssociationConnector Association="RoboEvalModel.FK__Student__Transcr__1BFD2C07" />
-        <AssociationConnector Association="RoboEvalModel.CourseTaken" ManuallyRouted="false" >
-        </AssociationConnector>
         <AssociationConnector Association="RoboEvalModel.MajorRequirements" />
         <AssociationConnector Association="RoboEvalModel.TranscriptMajors" />
       </Diagram>

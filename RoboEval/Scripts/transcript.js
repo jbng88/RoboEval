@@ -1,17 +1,12 @@
 ﻿function onSelect(selection)
 {
-    if (selection === 1)
+    if (selection === 2)
     {
-        if (!$('#addCourseInfoForm').hasClass('hide'))
-        {
-            $('#addCourseInfoForm').addClass('hide');
-        }
-
         onGetTranscript($('#studentId').val());
     }
-    else if (selection === 2)
+    else if (selection === 4)
     {
-        onGetAcademicPlan($('#studentId').val());
+        onGetEdPlan($('#studentId').val());
     }
 }
 
@@ -24,28 +19,24 @@ function onGetTranscript(studentId)
         contentType: 'application/json',
         crossDomain: true,
         data: {
-            studentId: studentId.value
+            studentId: studentId
         },
-        success: function (data) {
-            $(".transcript-body").empty();
+        success: function (courses) {
+            $("#transcript").empty();
 
-            for (var i in data) {
-                $(".transcript-body").append(
+            for (var i in courses) {
+                $("#transcript").append(
                     '<div class="col-md-12 form-body">' +
                         '<div class="col-md-2 form-group">' +
-                            '<input class="form-control" id="course' + i + '" value="' + data[i].CourseId + '"/>' +
+                            '<input class="form-control" id="course' + i + '" value="' + courses[i].CourseId + '" disabled />' +
                         '</div>' +
-                        '<div class="col-md-1 form-group">' +
-                            '<input class="form-control" id="section' + i + '" value="' + data[i].CourseName + '" />' +
-                        '</div>' +
-                        '<div class="col-md-6 form-group">' +
-                            '<input class="form-control" id="description' + i + '" value="' + data[i].Description + '" />' +
+                        '<div class="col-md-8 form-group">' +
+                            '<input class="form-control" id="section' + i + '" value="' + courses[i].Name + '" disabled />' +
                         '</div>' +
                         '<div class="col-md-2 form-group">' +
-                            '<input class="form-control" id="semester' + i + '" value="' + data[i].Semester + '" />' +
-                        '</div>' +
-                        '<div class="col-md-1 form-group">' +
-                            '<input class="form-control" id="grade' + i + '" value="' + data[i].Grade + '" />' +
+                            (courses[i].Grade ?
+                                ('<input class="form-control" id="grade' + i + '" value="' + courses[i].Grade + '" disabled />')
+                                : ('<input class="form-control" id="grade' + i + '" />')) +
                         '</div>' +
                     '</div>')
             }
@@ -56,9 +47,9 @@ function onGetTranscript(studentId)
     });
 }
 
-function onGetAcademicPlan() {
+function onGetEdPlan() {
     $.ajax({
-        url: 'http://localhost:60548/api/Transcript/GetAcademicPlan',
+        url: 'http://localhost:60548/api/Transcript/GetStudentEdPlan',
         type: 'GET',
         dataType: 'json',
         contentType: 'application/json',
@@ -66,46 +57,39 @@ function onGetAcademicPlan() {
         data: {
             studentId: studentId.value
         },
-        success: function () {
-            $(".transcript-body").empty();
+        success: function (edPlan) {
+            $("#transcript").empty();
 
-            for (var i in data.CoursesTaken) {
-                $(".transcript-body").append(
+            for (var i in edPlan.CoursesTaken) {
+                $("#transcript").append(
                     '<div class="col-md-12 form-body">' +
                         '<div class="col-md-2 form-group">' +
-                            '<input class="form-control" id="course' + i + '" />' +
+                            '<input class="form-control" id="course' + i + '" value="' + edPlan.CoursesTaken[i].CourseId + '" disabled />' +
                         '</div>' +
-                        '<div class="col-md-1 form-group">' +
-                            '<input class="form-control" id="section' + i + '" />' +
-                        '</div>' +
-                        '<div class="col-md-6 form-group">' +
-                            '<input class="form-control" id="description' + i + '" />' +
+                        '<div class="col-md-8 form-group">' +
+                            '<input class="form-control" id="section' + i + '" value="' + edPlan.CoursesTaken[i].Name + '" disabled />' +
                         '</div>' +
                         '<div class="col-md-2 form-group">' +
-                            '<input class="form-control" id="semester' + i + '" />' +
-                        '</div>' +
-                        '<div class="col-md-1 form-group">' +
-                            '<input class="form-control" id="grade' + i + '" />' +
+                            (edPlan.CoursesTaken[i].Grade ?
+                                ('<input class="form-control" id="grade' + i + '" value="' + edPlan.CoursesTaken[i].Grade + '" disabled />')
+                                : ('<input class="form-control" id="grade' + i + '" />')) +
                         '</div>' +
                     '</div>')
             }
-            for (var j in data.CoursesNeeded) {
-                $(".transcript-body").append(
+            for (var j in edPlan.CoursesNeeded) {
+                $("#coursesNeeded").append(
+                    '<div class="col-md-12">Courses Needed:</div>' +
                     '<div class="col-md-12 form-body">' +
                         '<div class="col-md-2 form-group">' +
-                            '<input class="form-control" id="course' + j + '"/>' +
+                            '<input class="form-control" id="course' + j + '" value="' + edPlan.CoursesNeeded[j].CourseId + '" disabled />' +
                         '</div>' +
-                        '<div class="col-md-1 form-group">' +
-                            '<input class="form-control" id="section' + j + '" />' +
-                        '</div>' +
-                        '<div class="col-md-6 form-group">' +
-                            '<input class="form-control" id="description' + j + '" />' +
+                        '<div class="col-md-8 form-group">' +
+                            '<input class="form-control" id="section' + j + '" value="' + edPlan.CoursesNeeded[j].Name + '" disabled />' +
                         '</div>' +
                         '<div class="col-md-2 form-group">' +
-                            '<input class="form-control" id="semester' + j + '" />' +
-                        '</div>' +
-                        '<div class="col-md-1 form-group">' +
-                            '<input class="form-control" id="grade' + j + '" />' +
+                            (edPlan.CoursesNeeded[j].Grade ?
+                                    ('<input class="form-control" id="grade' + j + '" value="' + edPlan.CoursesNeeded[j].Grade + '" disabled />')
+                                    : ('<input class="form-control" id="grade' + j + '" disabled />')) +
                         '</div>' +
                     '</div>')
             }
@@ -117,43 +101,39 @@ function onGetAcademicPlan() {
 }
 
 function onModifyTranscript(form) {
+    var transcriptDto = {
+        TranscriptId: 1,
+        Courses: []
+    };
+    var courseId = 0;
+    var name = null;
+
+    for (var i in form)
+    {
+        if (i % 3 === 0) {
+            courseId = form[i].value;
+        }
+        else if (i % 3 === 1) {
+            name = form[i].value;
+        }
+        if (i % 3 === 2) {
+            transcriptDto.Courses.push({
+                CourseId: courseId,
+                Name: name,
+                Grade: form[i].value
+            });
+        }
+    }
+
     $.ajax({
         url: 'http://localhost:60548/api/Transcript/ModifyTranscript',
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json',
         crossDomain: true,
-        data: {
-            studentId: studentId.value,
-            courseId: courseId.value,
-            grade: grade.value
-        },
-        success: function (data) {
-            $(".transcript-body").empty();
-
-            for (var i in data) {
-                $(".transcript-body").append(
-                    '<div class="col-md-12 form-body">' +
-                        '<div class="col-md-2 form-group">' +
-                            '<input class="form-control" id="course' + i + '"/>' +
-                        '</div>' +
-                        '<div class="col-md-1 form-group">' +
-                            '<input class="form-control" id="section' + i + '" />' +
-                        '</div>' +
-                        '<div class="col-md-6 form-group">' +
-                            '<input class="form-control" id="description' + i + '" />' +
-                        '</div>' +
-                        '<div class="col-md-2 form-group">' +
-                            '<input class="form-control" id="semester' + i + '" />' +
-                        '</div>' +
-                        '<div class="col-md-1 form-group">' +
-                            '<input class="form-control" id="grade' + i + '" />' +
-                        '</div>' +
-                    '</div>')
-            }
-        },
-        error: function () {
-            console.log('Something went wrong!');
+        data: JSON.stringify(transcriptDto),
+        error: function (data) {
+            onGetTranscript($('#studentId').val());
         }
     });
 }

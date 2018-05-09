@@ -21,9 +21,18 @@ namespace RoboEval.Controllers
             {
                 var dbContext = new DbContext("RoboEvalEntities");
 
-                var students = dbContext.Database.SqlQuery<Student>("SELECT * FROM Student").ToList();
-                var transcripts = dbContext.Database.SqlQuery<Transcript>("SELECT * FROM Transcript").ToList();
-                return Json(students.FirstOrDefault(x => x.StudentId == studentId)?.Transcript?.Courses);
+                var coursesTaken = dbContext.Set<CoursesTaken>()
+                    .Where(x => x.Transcript.Students.FirstOrDefault().StudentId == studentId)
+                    .Include(x => x.Transcript.Students)
+                    .Include(x => x.Course)
+                    .ToList();
+
+                return Json(coursesTaken.Select(x => new CourseDto
+                {
+                    CourseId = x.CourseId,
+                    Name = x.Course.Name,
+                    Grade = x.Grade
+                }));
             }
             catch (Exception ex)
             {
@@ -31,32 +40,46 @@ namespace RoboEval.Controllers
             }
         }
 
-        [Route("GetAcademicPlan")]
-        public IHttpActionResult GetAcademicPlan(int studentId)
+        [Route("GetStudentEdPlan")]
+        public IHttpActionResult GetStudentEdPlan(int studentId)
         {
             try
             {
                 var dbContext = new DbContext("RoboEvalEntities");
-                //FirstOrDefault to return first row, ToList is the whole list
-                var students = dbContext.Database.SqlQuery<Student>("SELECT * FROM Student").ToList();
-                var major = dbContext.Database.SqlQuery<Major>("SELECT * FROM Major").ToList();
-                var transcripts = dbContext.Database.SqlQuery<Transcript>("SELECT * FROM Transcipt").ToList();
-                var majorId = students.FirstOrDefault(x => x.StudentId == studentId).Transcript.Majors.FirstOrDefault().MajorId;
+                var majorId = dbContext.Set<Student>()
+                    .Include(x => x.Transcript.Majors)
+                    .FirstOrDefault(x => x.StudentId == studentId)
+                    .Transcript.Majors.FirstOrDefault().MajorId;
 
-                var majorRequirements = major.FirstOrDefault(x => x.MajorId == majorId).Courses;
-                var transcriptId = students.FirstOrDefault(student => student.StudentId == studentId).TranscriptId;
-                var coursesTaken = transcripts.FirstOrDefault(x => x.TranscriptId == transcriptId).Courses;
-                var coursesNeeded = new List<Course>();
+                var majorRequirements = dbContext.Set<Course>().Where(x => x.Majors.Any(y => y.MajorId == majorId)).ToList();
+                var transcriptId = dbContext.Set<Student>().FirstOrDefault(student => student.StudentId == studentId).TranscriptId;
+
+                var edPlan = new StudentEdPlan
+                {
+                    StudentId = studentId,
+                    CoursesTaken = dbContext.Set<CoursesTaken>().Where(x => x.TranscriptId == transcriptId)
+                        .Select(x => new CourseDto
+                        {
+                            CourseId = x.CourseId,
+                            Name = x.Course.Name,
+                            Grade = x.Grade
+                        }).ToList(),
+                    CoursesNeeded = new List<CourseDto>()                        
+                };
 
                 foreach (var course in majorRequirements)
                 {
-                    if (!coursesTaken.Any(x => x.CourseId == course.CourseId))
+                    if (!edPlan.CoursesTaken.Any(x => x.CourseId == course.CourseId))
                     {
-                        coursesNeeded.Add(course);
+                        edPlan.CoursesNeeded.Add(new CourseDto
+                        {
+                            CourseId = course.CourseId,
+                            Name = course.Name
+                        });
                     }
                 }
 
-                return Json(coursesNeeded);
+                return Json(edPlan);
             }
             catch (Exception ex)
             {
@@ -64,5 +87,31 @@ namespace RoboEval.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("ModifyTranscript")]
+        public IHttpActionResult ModifyTranscript([FromBody]TranscriptDto transcriptDto)
+        {
+            try
+            {
+                var dbContext = new DbContext("RoboEvalEntities");
+                var coursesTaken = dbContext.Set<CoursesTaken>().Where(x => x.TranscriptId == transcriptDto.TranscriptId).ToList();
+
+                foreach (var course in coursesTaken)
+                {
+                    if (course.Grade == null)
+                    {
+                        var grade = transcriptDto.Courses.FirstOrDefault(x => x.CourseId == course.CourseId).Grade;
+                        course.Grade = string.IsNullOrEmpty(grade) ? null : grade;
+                    }
+                }
+                dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
     }
 }

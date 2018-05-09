@@ -73,7 +73,7 @@ function onGetAcademicPlan() {
                 $(".transcript-body").append(
                     '<div class="col-md-12 form-body">' +
                         '<div class="col-md-2 form-group">' +
-                            '<input class="form-control" id="course' + i + '"/>' +
+                            '<input class="form-control" id="course' + i + '" />' +
                         '</div>' +
                         '<div class="col-md-1 form-group">' +
                             '<input class="form-control" id="section' + i + '" />' +

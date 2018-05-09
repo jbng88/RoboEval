@@ -40,6 +40,40 @@ namespace RoboEval.Controllers
             }
         }
 
+<<<<<<< HEAD
+        //      START NEW ADDITIONS 
+         
+        //GRADE CHANGE FUNCTION 
+        public void ModifyGrade(Course grade)
+=======
+
+        //FUNCTION TO ADD COURSES ONTO A STUDENT'S TRANSCRIPT (MODIFY TRANSCRIPT)
+        public void AddClass(Course course)
+>>>>>>> 46b1909d6fb7be062eb173ae3b75d65ed70bf3a8
+        {
+            try
+            {
+                var dbContext = new DbContext("RoboEvalEntities");
+
+                dbContext.Set<Course>().Add(grade);
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }    
+        //END GRADE CHANGE FUNCTION
+
+
+      //public void DisplaySuggestedEdPlan() => GetAllCoursesStillNeededForMajor()
+        private void GetAllCoursesStillNeededForMajor()
+        {
+            throw new NotImplementedException();
+        }
+
+<<<<<<< HEAD
+=======
         //      START NEW ADDITIONS 
          
         //GRADE CHANGE FUNCTION 
@@ -63,27 +97,10 @@ namespace RoboEval.Controllers
       //public void DisplaySuggestedEdPlan() => GetAllCoursesStillNeededForMajor()
         private void GetAllCoursesStillNeededForMajor()
         {
-            try
-            {
-                var dbContext = new DbContext("RoboEvalEntities");
-
-                dbContext.Set<Course>().Add(grade);
-                dbContext.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }    
-        //END GRADE CHANGE FUNCTION
-
-
-      //public void DisplaySuggestedEdPlan() => GetAllCoursesStillNeededForMajor()
-        private void GetAllCoursesStillNeededForMajor()
-        {
             throw new NotImplementedException();
         }
 
+>>>>>>> 46b1909d6fb7be062eb173ae3b75d65ed70bf3a8
           //END NEW ADDITIONS
     }
 }

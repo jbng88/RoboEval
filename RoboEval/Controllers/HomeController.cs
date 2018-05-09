@@ -61,7 +61,26 @@ namespace RoboEval.Controllers
 
 
       //public void DisplaySuggestedEdPlan() => GetAllCoursesStillNeededForMajor()
+        //FUNCTION TO ADD COURSES ONTO A STUDENT'S TRANSCRIPT (MODIFY TRANSCRIPT)
         private void GetAllCoursesStillNeededForMajor()
+        {
+            try
+            {
+                var dbContext = new DbContext("RoboEvalEntities");
+
+                dbContext.Set<Course>().Add(grade);
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }    
+
+        //      START NEW ADDITIONS 
+         
+        //GRADE CHANGE FUNCTION 
+        public void ModifyGrade(Course grade)
         {
             try
             {

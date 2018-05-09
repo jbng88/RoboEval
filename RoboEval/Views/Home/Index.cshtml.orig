@@ -9,11 +9,8 @@
                 </button>
                 <div class="dropdown-menu">
 <<<<<<< HEAD
-<<<<<<< HEAD
-                    <div class="col-md-12"><a class="dropdown-item" href="#" onclick="onSelect(1)">STUDENT TRANSCRIPT</a></div>
-                    <div class="col-md-12"><a class="dropdown-item" href="#" onclick="onSelect(2)">STUDENT ACADEMIC PLAN</a></div>
-                    <div class="col-md-12"><a class="dropdown-item" href="#" onclick="onSelect(3)">STUDENT MODIFY TRANSCRIPT</a></div>
-=======
+
+
 =======
 >>>>>>> 46b1909d6fb7be062eb173ae3b75d65ed70bf3a8
                     <div class="col-md-12"><a class="dropdown-item" href="#" onclick="onSelect(1)">STUDENT PROFILE</a></div>       

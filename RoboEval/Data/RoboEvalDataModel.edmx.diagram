@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="866c8bb8a41c46cfb19ef87db65cb617" Name="Diagram1" ZoomLevel="100">
+      <Diagram DiagramId="866c8bb8a41c46cfb19ef87db65cb617" Name="Diagram1" ZoomLevel="74">
         <EntityTypeShape EntityType="RoboEvalModel.Course" Width="1.5" PointX="0.75" PointY="2.75" />
         <EntityTypeShape EntityType="RoboEvalModel.CoursesTaken" Width="1.5" PointX="7.5" PointY="2" />
         <EntityTypeShape EntityType="RoboEvalModel.Major" Width="1.5" PointX="3" PointY="5.5" />
